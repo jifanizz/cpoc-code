@@ -1,0 +1,13 @@
+- hosts: n540
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+  - name: Execute show ver
+    cisco.iosxr.iosxr_command:
+      commands: show version
+    register: xr_version
+
+  - name: show output
+    debug:
+      var: xr_version.stdout

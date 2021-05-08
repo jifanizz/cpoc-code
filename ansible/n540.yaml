@@ -1,0 +1,6 @@
+---
+- name: Generate Router Day1 Configs
+  hosts: localhost
+
+  roles:
+    - n540

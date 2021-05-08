@@ -1,0 +1,221 @@
+hostname {{item.hostname}}
+!
+clock timezone EST America/Montreal
+logging trap debugging
+logging archive
+ device harddisk
+ severity debugging
+ file-size 1
+ frequency daily
+ archive-size 1000
+ archive-length 104
+!
+logging console warning
+logging monitor debugging
+logging buffered 2500000
+logging buffered debugging
+logging source-interface Loopback4
+logging suppress duplicates
+service timestamps log datetime localtime msec show-timezone
+service timestamps debug datetime localtime msec show-timezone
+logging events link-status software-interfaces
+domain lookup disable
+vrf OAM-SS-BH
+ description OAM-SS-BH
+ address-family ipv4 unicast
+  import route-policy OAM-filter-RM
+  import route-target
+   65432:4020570020
+   65432:4020590020
+   65432:4030970000
+   65432:4030980000
+  !
+  export route-target
+   65432:4020961612
+  !
+  maximum prefix 300 75
+ !
+!
+vrf LTE-402048
+ description LTE-402048
+ address-family ipv4 unicast
+  import route-target
+   65432:4020480020
+   65432:4020481612
+   65432:4020641620
+   65432:4030521610
+   65432:4030550020
+  !
+  export route-target
+   65432:4020481612
+  !
+  maximum prefix 4000 75
+ !
+!
+vrf OAM-402058
+ description OAM-402058
+ address-family ipv4 unicast
+  import route-policy OAM-filter-RM
+  import route-target
+   65432:4020570020
+   65432:4020590020
+   65432:4020621620
+  !
+  export route-target
+   65432:4020581612
+  !
+  maximum prefix 300 75
+ !
+!
+vrf TSF-401030
+ description TSF-401030
+ address-family ipv4 unicast
+  import route-target
+   65432:4010220200
+   65432:4010220700
+   65432:4010220800
+   65432:4010310000
+   65432:4010750020
+  !
+  export route-target
+   65432:4010300010
+  !
+  maximum prefix 200 75
+ !
+!
+vrf GESTION-UMPLS
+ description GESTION-UMPLS
+ address-family ipv4 unicast
+  import route-policy GESTION-filter-RM
+  import route-target
+   65432:4019901111
+   65432:4019903333
+  !
+  export route-target
+   65432:4019903333
+  !
+  maximum prefix 100 75
+ !
+!
+tcp mss 10000
+tcp window-size 65535
+tcp path-mtu-discovery
+!
+interface Loopback4
+ description IP Gestion
+ no shutdown
+ ipv4 address {{item.loopback4ip}} {{item.loopback4mask}}
+!
+interface TenGigE0/0/0/16
+ no shutdown
+ mtu 5014
+ ipv4 address {{ item.te16ip}}
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+!
+interface TenGigE0/0/0/17
+ no shutdown 
+ mtu 5014
+ ipv4 address {{ item.te17ip}}
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+!
+interface TenGigE0/0/0/18
+ no shutdown 
+ mtu 5014
+ ipv4 address {{ item.te18ip}}
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+!
+interface TenGigE0/0/0/19
+ no shutdown 
+ mtu 5014
+ ipv4 address {{ item.te19ip}}
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+router ospf 4000
+ log adjacency changes
+ router-id {{item.loopback4ip}}
+ bfd minimum-interval 10
+ bfd multiplier 3
+ mpls ldp sync
+ prefix-suppression
+ timers throttle lsa all 50 200 5000
+ timers throttle spf 50 200 5000
+ timers lsa min-arrival 100
+ timers pacing flood 5
+ auto-cost reference-bandwidth 4000000
+ max-metric router-lsa on-startup 300
+ area 127
+  mpls ldp auto-config
+  interface Loopback4
+   cost 1
+   passive enable
+  !
+  interface Te0/0/0/16
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+  interface Te0/0/0/17
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+  interface Te0/0/0/18
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+  interface Te0/0/0/19
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+ !
+!
+mpls oam
+!
+mpls ldp
+ log
+  neighbor
+  nsr
+  graceful-restart
+ !
+ igp sync delay on-session-up 10
+ router-id {{item.loopback4ip}}
+ session protection
+ address-family ipv4
+  label
+   local
+    allocate for host-routes
+    advertise
+     for LOOPBACKS-DORSALE-AGICS
+     explicit-null
+    !
+   !
+  !
+ !
+!
+hw-module profile qos hqos-enable
+end

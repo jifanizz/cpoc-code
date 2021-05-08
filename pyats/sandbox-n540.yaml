@@ -1,0 +1,40 @@
+devices:
+  xrv1:
+    connections:
+      cli:
+        ip: 10.10.20.100
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxr
+    type: iosxr
+  xrv2:
+    connections:
+      cli:
+        ip: 10.10.20.101
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxr
+    type: iosxr
+  xrv3:
+    connections:
+      cli:
+        ip: 10.10.20.102
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxr
+    type: iosxr

@@ -1,0 +1,8 @@
+- hosts: n540
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+  - name: push config file
+    cisco.iosxr.iosxr_config:
+       src: "/Users/jifanizz/pyATS/cpoc/ansible/CONFIGS/{{ inventory_hostname }}.cfg"

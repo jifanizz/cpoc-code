@@ -1,0 +1,22 @@
+---
+routers:
+  - hostname: soda2
+    loopback4ip: 10.1.1.11
+    loopback4mask: 255.255.255.255
+    bdi912ip: 10.101.1.2 255.255.255.252
+    bdi913ip: 10.101.1.6 255.255.255.252
+  - hostname: soda3
+    loopback4ip: 10.1.1.12
+    loopback4mask: 255.255.255.255
+    bdi912ip: 10.101.1.10 255.255.255.252
+    bdi913ip: 10.101.1.14 255.255.255.252
+  - hostname: soda4
+    loopback4ip: 10.1.1.13
+    loopback4mask: 255.255.255.255
+    bdi912ip: 10.101.1.18 255.255.255.252
+    bdi913ip: 10.101.1.22 255.255.255.252
+  - hostname: soda5
+    loopback4ip: 10.1.1.14
+    loopback4mask: 255.255.255.255
+    bdi912ip: 10.101.1.26 255.255.255.252
+    bdi913ip: 10.101.1.30 255.255.255.252    

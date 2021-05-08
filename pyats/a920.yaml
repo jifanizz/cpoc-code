@@ -1,0 +1,53 @@
+devices:
+  soda2:
+    connections:
+      cli:
+        ip: 198.18.188.2
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe
+  soda3:
+    connections:
+      cli:
+        ip: 198.18.188.3
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe
+  soda4:
+    connections:
+      cli:
+        ip: 198.18.188.4
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe
+  soda5:
+    connections:
+      cli:
+        ip: 198.18.188.5
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe

@@ -1,0 +1,20 @@
+---
+
+- name: CONFIGURE DEVICES
+  hosts: xr
+  gather_facts: false
+
+  tasks:
+    - name: Gather Facts
+      cisco.iosxr.iosxr_facts:
+         gather_subset: all
+      register: xr_facts
+
+    - name: Print Facts
+      #when: xr_facts.ansible_facts.ansible_net_version == '6.3.2[Default]'
+      debug:
+        #var: xr_facts
+        msg:
+          #- "Hostname: {{xr_facts.ansible_facts.ansible_net_hostname}}"
+          #- "Version: {{xr_facts.ansible_facts.ansible_net_version}}"
+          - "OS: {{xr_facts.ansible_facts.ansible_net_system}}"

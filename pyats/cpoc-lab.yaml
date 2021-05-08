@@ -1,0 +1,118 @@
+devices:
+  soda11:
+    connections:
+      cli:
+        ip: 198.18.188.11
+        protocol: ssh
+    credentials:
+      default:
+        password: Cisco@123
+        username: cisco
+      enable:
+        password: Cisco@123
+    os: iosxr
+    type: iosxr
+  soda14:
+    connections:
+      cli:
+        ip: 198.18.188.14
+        protocol: ssh
+    credentials:
+      default:
+        password: Cisco@123
+        username: cisco
+      enable:
+        password: Cisco@123
+    os: iosxr
+    type: iosxr
+  soda15:
+    connections:
+      cli:
+        ip: 198.18.188.15
+        protocol: ssh
+    credentials:
+      default:
+        password: Cisco@123
+        username: cisco
+      enable:
+        password: Cisco@123
+    os: iosxr
+    type: iosxr
+  soda16:
+    connections:
+      cli:
+        ip: 198.18.188.16
+        protocol: ssh
+    credentials:
+      default:
+        password: Cisco@123
+        username: cisco
+      enable:
+        password: Cisco@123
+    os: iosxr
+    type: iosxr
+  soda17:
+    connections:
+      cli:
+        ip: 198.18.188.17
+        protocol: ssh
+    credentials:
+      default:
+        password: Cisco@123
+        username: cisco
+      enable:
+        password: Cisco@123
+    os: iosxr
+    type: iosxr
+  soda2:
+    connections:
+      cli:
+        ip: 198.18.188.2
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe
+  soda3:
+    connections:
+      cli:
+        ip: 198.18.188.3
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe
+  soda4:
+    connections:
+      cli:
+        ip: 198.18.188.4
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe
+  soda5:
+    connections:
+      cli:
+        ip: 198.18.188.5
+        protocol: ssh
+    credentials:
+      default:
+        password: cisco
+        username: cisco
+      enable:
+        password: cisco
+    os: iosxe
+    type: iosxe

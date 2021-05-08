@@ -1,0 +1,27 @@
+[all:vars]
+ansible_become=yes
+ansible_become_method=enable
+ansible_connection=network_cli
+
+[a920:vars]
+ansible_user=cisco
+ansible_ssh_pass=cisco
+ansible_network_os=ios
+
+[n540:vars]
+ansible_user=cisco
+ansible_ssh_pass=Cisco@123
+ansible_network_os=iosxr
+
+[a920]
+soda2 ansible_host=198.18.188.2
+soda3 ansible_host=198.18.188.3
+soda4 ansible_host=198.18.188.4
+soda5 ansible_host=198.18.188.5
+
+[n540]
+soda11 ansible_host=198.18.188.11
+soda14 ansible_host=198.18.188.14
+soda15 ansible_host=198.18.188.15
+soda16 ansible_host=198.18.188.16
+soda17 ansible_host=198.18.188.17

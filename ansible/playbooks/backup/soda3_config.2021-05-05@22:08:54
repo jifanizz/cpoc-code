@@ -1,0 +1,867 @@
+Building configuration...
+
+Current configuration : 23237 bytes
+!
+! Last configuration change at 22:06:40 EDT Wed May 5 2021 by cisco
+! NVRAM config last updated at 22:04:44 EDT Wed May 5 2021 by cisco
+!
+version 16.9
+service nagle
+no service pad
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+service password-encryption
+service linenumber
+service unsupported-transceiver
+no platform punt-keepalive disable-kernel-core
+platform bfd-debug-trace 1
+platform xconnect load-balance-hash-algo mac-ip-instanceid
+platform tcam-parity-error enable
+platform tcam-threshold enable qos 50
+platform tcam-threshold alarm-frequency 24
+!
+hostname soda3
+!
+boot-start-marker
+boot system bootflash:/asr920-universalk9_npe.16.09.04.SPA.bin
+boot-end-marker
+!
+!
+vrf definition GESTION-UMPLS
+ description GESTION-UMPLS
+ rd 65432:4019900018
+ route-target export 65432:4019903333
+ route-target import 65432:4019903333
+ route-target import 65432:4019901111
+ !
+ address-family ipv4
+  import map GESTION-filter-RM
+  maximum routes 100 75
+ exit-address-family
+!
+vrf definition LTE-402048
+ rd 65432:4020480018
+ route-target export 65432:4020481612
+ route-target import 65432:4020481612
+ route-target import 65432:4020641620
+ route-target import 65432:4020480020
+ route-target import 65432:4030550020
+ route-target import 65432:4030521610
+ route-target import 65432:4012000000
+ route-target import 65432:4033070800
+ !
+ address-family ipv4
+  export map EXPORT-LTE-402048
+  maximum routes 5000 75
+ exit-address-family
+!
+vrf definition LTE-LAB-SAMSUNG
+ description TEST DE BASCULEMENT SAMSUNG
+ rd 65432:4020970018
+ route-target export 65432:4020481612
+ route-target import 65432:4020481612
+ route-target import 65432:4020641620
+ route-target import 65432:4020480020
+ route-target import 65432:4030550020
+ route-target import 65432:4030521610
+ route-target import 65432:4012000000
+ !
+ address-family ipv4
+  maximum routes 5000 75
+ exit-address-family
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition OAM-402058
+ rd 65432:4020580018
+ route-target export 65432:4020581612
+ route-target import 65432:4020621620
+ route-target import 65432:4020590020
+ route-target import 65432:4020570020
+ route-target import 65432:4010700020
+ route-target import 65432:4020581612
+ !
+ address-family ipv4
+  import map OAM-filter-RM
+  maximum routes 300 75
+ exit-address-family
+!
+vrf definition OAM-SS-BH
+ description OAM-SS-BH
+ rd 65432:4020960018
+ route-target export 65432:4020961612
+ route-target import 65432:4030970000
+ route-target import 65432:4020590020
+ route-target import 65432:4020570020
+ route-target import 65432:4030980000
+ !
+ address-family ipv4
+  import map OAM-filter-RM
+  maximum routes 300 75
+ exit-address-family
+!
+vrf definition T5G-401200
+ description T5G-401200
+ rd 65432:4012000018
+ route-target export 65432:4012001611
+ route-target import 65432:4012000000
+ !
+ address-family ipv4
+  maximum routes 1000 75
+ exit-address-family
+!
+vrf definition TSF-401030
+ description TSF-401030
+ rd 65432:4010300018
+ route-target export 65432:4010300010
+ route-target import 65432:4010220200
+ route-target import 65432:4010220700
+ route-target import 65432:4010220800
+ route-target import 65432:4010310000
+ route-target import 65432:4010750020
+ !
+ address-family ipv4
+  maximum routes 200 75
+ exit-address-family
+!
+logging buffered 1000000
+no logging console
+enable secret 5 $1$aH4J$0Qw6SA7l3Ik.SghEzqwX21
+!
+no aaa new-model
+clock timezone EST -5 0
+clock summer-time EDT recurring
+clock calendar-valid
+cef table output-chain build favor convergence-speed
+port-channel load-balance-hash-algo src-dst-mixed-ip-port
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name cisco.com
+!
+!
+!
+login on-success log
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+mpls label protocol ldp
+mpls ldp explicit-null
+mpls ldp graceful-restart
+mpls ldp session protection
+mpls ldp igp sync holddown 1000
+multilink bundle-name authenticated
+!
+!
+!
+license feature ptp
+license udi pid ASR-920-12CZ-A sn CAT2333U46K
+license accept end user agreement
+license boot level advancedmetroipaccess
+no license smart enable
+!
+!
+spanning-tree extend system-id
+no spanning-tree vlan 1-4094
+sdm prefer default 
+diagnostic bootup level minimal
+!
+!
+username cisco privilege 15 password 7 01100F175804
+!
+redundancy
+!
+!
+!
+!
+!
+transceiver type all
+ monitoring
+cdp run
+!
+lldp run
+!
+!
+class-map match-any STATSv3_PREC_EXP_1-IN
+ match mpls experimental topmost 1 
+ match precedence 1 
+class-map match-any TSFv3_IPP1-IN
+ match precedence 1 
+class-map match-any STATSv3_PREC_EXP_2-IN
+ match mpls experimental topmost 2 
+ match precedence 2 
+class-map match-any TSFv3_IPP2-IN
+ match precedence 2 
+class-map match-any STATSv3_PREC_EXP_3-IN
+ match mpls experimental topmost 3 
+ match precedence 3 
+class-map match-any TSFv3_DC567-OUT
+ match discard-class 5
+ match discard-class 6
+ match discard-class 7
+class-map match-any STATSv3_PREC_EXP_4-IN
+ match mpls experimental topmost 4 
+ match precedence 4 
+class-map match-any TSFv3_IPP567-IN
+ match precedence 5  6  7 
+class-map match-any STATSv3_PREC_EXP_5-IN
+ match mpls experimental topmost 5 
+ match precedence 5 
+class-map match-any TSFv3_DC2-OUT
+ match discard-class 2
+class-map match-any STATSv3_PREC_EXP_6-IN
+ match mpls experimental topmost 6 
+ match precedence 6 
+class-map match-any TSFv3_DC1-OUT
+ match discard-class 1
+class-map match-any STATSv3_PREC_EXP_7-IN
+ match mpls experimental topmost 7 
+ match precedence 7 
+class-map match-any UMPLSBHv3_DC3-OUT
+ match discard-class 3
+class-map match-any UMPLSBHv3_DC2-OUT
+ match discard-class 2
+class-map match-any UMPLSBHv3_DC1-OUT
+ match discard-class 1
+class-map match-any UMPLSBHv3_DC5-OUT
+ match discard-class 5
+class-map match-any UMPLSBHv3_DC4-OUT
+ match discard-class 4
+class-map match-any TSFv3_VL_RCI_DSCP_to_DC3-IN
+ match dscp cs3  af31  af33  af42  af43 
+class-map match-any TSFv3_VL_RCI_DSCP_to_DC1-IN
+ match dscp af11  af12  af13  af21  af22  af23 
+class-map match-any TSFv3_VL_RCI_DSCP_to_DC6-IN
+ match dscp cs5  cs6  51  54 
+class-map match-any TSFv3_VL_RCI_DSCP_to_DC5-IN
+ match dscp ef 
+class-map match-any TSFv3_VL_RCI_DSCP_to_DC4-IN
+ match dscp cs4 
+class-map match-any UMPLSBHv3_DC67-OUT
+ match discard-class 6
+ match discard-class 7
+class-map match-any TSFv3_DC34-OUT
+ match discard-class 3
+ match discard-class 4
+class-map match-any TSFv3_IPP34-IN
+ match precedence 3  4 
+class-map match-any TSFv3_VL_RCI_DC5-OUT
+ match discard-class 5
+class-map match-any TSFv3_VL_RCI_DC4-OUT
+ match discard-class 4
+class-map match-any TSFv3_VL_RCI_DC6-OUT
+ match discard-class 6
+class-map match-any TSFv3_VL_RCI_DC1-OUT
+ match discard-class 1
+class-map match-any TSFv3_VL_RCI_DC3-OUT
+ match discard-class 3
+class-map match-any TSFv3_VL_RCI_DC2-OUT
+ match discard-class 2
+!
+policy-map TSFv3_ANTENNE_VL_LTE-OUT
+ class TSFv3_VL_RCI_DC5-OUT
+  priority percent 50
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC6-OUT
+  bandwidth remaining percent 20 
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC4-OUT
+  bandwidth remaining percent 20 
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC3-OUT
+  bandwidth remaining percent 15 
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 200000 bytes
+ class TSFv3_VL_RCI_DC1-OUT
+  bandwidth remaining percent 20 
+  queue-limit 300000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 1 150000 bytes 300000 bytes
+ class class-default
+  bandwidth remaining percent 15 
+  queue-limit 200000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 100000 bytes 200000 bytes
+policy-map TSFv3_ANTENNE_RCI-OUT
+ class TSFv3_VL_RCI_DC5-OUT
+  priority percent 50
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC6-OUT
+  bandwidth remaining percent 20 
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC4-OUT
+  bandwidth remaining percent 20 
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC3-OUT
+  bandwidth remaining percent 15 
+  queue-limit 100000 bytes
+ class TSFv3_VL_RCI_DC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 200000 bytes
+ class TSFv3_VL_RCI_DC1-OUT
+  bandwidth remaining percent 20 
+  queue-limit 300000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 1 150000 bytes 300000 bytes
+ class class-default
+  bandwidth remaining percent 15 
+  queue-limit 200000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 100000 bytes 200000 bytes
+policy-map STATSv3_GW21-IN-1G
+ class STATSv3_PREC_EXP_7-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 7
+   exceed-action set-discard-class-transmit 7
+ class STATSv3_PREC_EXP_6-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 6
+   exceed-action set-discard-class-transmit 6
+ class STATSv3_PREC_EXP_5-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 5
+   exceed-action set-discard-class-transmit 5
+ class STATSv3_PREC_EXP_4-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 4
+   exceed-action set-discard-class-transmit 4
+ class STATSv3_PREC_EXP_3-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 3
+   exceed-action set-discard-class-transmit 3
+ class STATSv3_PREC_EXP_2-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 2
+   exceed-action set-discard-class-transmit 2
+ class STATSv3_PREC_EXP_1-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 1
+   exceed-action set-discard-class-transmit 1
+ class class-default
+  police cir 1000000000
+   conform-action set-discard-class-transmit 0
+   exceed-action set-discard-class-transmit 0
+policy-map STATSv3_GW21-IN-10G
+ class STATSv3_PREC_EXP_7-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 7
+   exceed-action set-discard-class-transmit 7
+ class STATSv3_PREC_EXP_6-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 6
+   exceed-action set-discard-class-transmit 6
+ class STATSv3_PREC_EXP_5-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 5
+   exceed-action set-discard-class-transmit 5
+ class STATSv3_PREC_EXP_4-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 4
+   exceed-action set-discard-class-transmit 4
+ class STATSv3_PREC_EXP_3-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 3
+   exceed-action set-discard-class-transmit 3
+ class STATSv3_PREC_EXP_2-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 2
+   exceed-action set-discard-class-transmit 2
+ class STATSv3_PREC_EXP_1-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 1
+   exceed-action set-discard-class-transmit 1
+ class class-default
+  police cir 10000000000
+   conform-action set-discard-class-transmit 0
+   exceed-action set-discard-class-transmit 0
+policy-map TSFv3_ANTENNE_VL_LTE-IN
+ class TSFv3_VL_RCI_DSCP_to_DC6-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 6
+   exceed-action set-discard-class-transmit 6
+ class TSFv3_VL_RCI_DSCP_to_DC5-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 5
+   exceed-action set-discard-class-transmit 5
+ class TSFv3_VL_RCI_DSCP_to_DC4-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 4
+   exceed-action set-discard-class-transmit 4
+ class TSFv3_VL_RCI_DSCP_to_DC3-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 3
+   exceed-action set-discard-class-transmit 3
+ class TSFv3_VL_RCI_DSCP_to_DC1-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 1
+   exceed-action set-discard-class-transmit 1
+ class class-default
+  police cir 1000000000
+   conform-action set-discard-class-transmit 0
+   exceed-action set-discard-class-transmit 0
+policy-map UMPLSBHv3_GW21-OUT-10G
+ class UMPLSBHv3_DC5-OUT
+  priority percent 50
+  queue-limit 122880 bytes
+  set cos 5
+  set mpls experimental topmost 5
+ class UMPLSBHv3_DC67-OUT
+  bandwidth remaining percent 10 
+  queue-limit 122880 bytes
+  set cos 6
+  set mpls experimental topmost 6
+ class UMPLSBHv3_DC4-OUT
+  bandwidth remaining percent 25 
+  queue-limit 122880 bytes
+  set cos 4
+  set mpls experimental topmost 4
+ class UMPLSBHv3_DC3-OUT
+  bandwidth remaining percent 20 
+  queue-limit 122880 bytes
+  set cos 3
+  set mpls experimental topmost 3
+ class UMPLSBHv3_DC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 122880 bytes
+  set cos 2
+  set mpls experimental topmost 2
+ class UMPLSBHv3_DC1-OUT
+  bandwidth remaining percent 25 
+  queue-limit 122880 bytes
+  random-detect discard-class-based
+  random-detect discard-class 1 61440 bytes 122880 bytes
+  set cos 1
+  set mpls experimental topmost 1
+ class class-default
+  bandwidth remaining percent 10 
+  queue-limit 122880 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 61440 bytes 122880 bytes
+  set cos 0
+  set mpls experimental topmost 0
+policy-map UMPLSBHv3_GW21-OUT-1G
+ class UMPLSBHv3_DC5-OUT
+  priority percent 50
+  queue-limit 100000 bytes
+  set cos 5
+  set mpls experimental topmost 5
+ class UMPLSBHv3_DC67-OUT
+  bandwidth remaining percent 10 
+  queue-limit 100000 bytes
+  set cos 6
+  set mpls experimental topmost 6
+ class UMPLSBHv3_DC4-OUT
+  bandwidth remaining percent 25 
+  queue-limit 100000 bytes
+  set cos 4
+  set mpls experimental topmost 4
+ class UMPLSBHv3_DC3-OUT
+  bandwidth remaining percent 20 
+  queue-limit 100000 bytes
+  set cos 3
+  set mpls experimental topmost 3
+ class UMPLSBHv3_DC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 200000 bytes
+  set cos 2
+  set mpls experimental topmost 2
+ class UMPLSBHv3_DC1-OUT
+  bandwidth remaining percent 25 
+  queue-limit 300000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 1 150000 bytes 300000 bytes
+  set cos 1
+  set mpls experimental topmost 1
+ class class-default
+  bandwidth remaining percent 10 
+  queue-limit 200000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 100000 bytes 200000 bytes
+  set cos 0
+  set mpls experimental topmost 0
+policy-map TSFv3_ANTENNE_VL_HSPA-IN
+ class TSFv3_IPP567-IN
+  police cir 100000000
+   conform-action set-discard-class-transmit 5
+   exceed-action set-discard-class-transmit 5
+ class TSFv3_IPP34-IN
+  police cir 100000000
+   conform-action set-discard-class-transmit 3
+   exceed-action set-discard-class-transmit 3
+ class TSFv3_IPP2-IN
+  police cir 100000000
+   conform-action set-discard-class-transmit 2
+   exceed-action set-discard-class-transmit 2
+ class TSFv3_IPP1-IN
+  police cir 100000000
+   conform-action set-discard-class-transmit 1
+   exceed-action set-discard-class-transmit 1
+ class class-default
+  police cir 100000000
+   conform-action set-discard-class-transmit 0
+   exceed-action set-discard-class-transmit 0
+policy-map TSFv3_ANTENNE_RCI-IN
+ class TSFv3_VL_RCI_DSCP_to_DC6-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 6
+   exceed-action set-discard-class-transmit 6
+ class TSFv3_VL_RCI_DSCP_to_DC5-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 5
+   exceed-action set-discard-class-transmit 5
+ class TSFv3_VL_RCI_DSCP_to_DC4-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 4
+   exceed-action set-discard-class-transmit 4
+ class TSFv3_VL_RCI_DSCP_to_DC3-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 3
+   exceed-action set-discard-class-transmit 3
+ class TSFv3_VL_RCI_DSCP_to_DC1-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 1
+   exceed-action set-discard-class-transmit 1
+ class class-default
+  police cir 1000000000
+   conform-action set-discard-class-transmit 0
+   exceed-action set-discard-class-transmit 0
+policy-map TSFv3_DERIVE_DOWNLINK-OUT
+ class UMPLSBHv3_DC5-OUT
+  priority percent 50
+  queue-limit 100000 bytes
+  set cos 5
+ class UMPLSBHv3_DC67-OUT
+  bandwidth remaining percent 10 
+  queue-limit 100000 bytes
+  set cos 6
+ class UMPLSBHv3_DC4-OUT
+  bandwidth remaining percent 25 
+  queue-limit 100000 bytes
+  set cos 4
+ class UMPLSBHv3_DC3-OUT
+  bandwidth remaining percent 20 
+  queue-limit 100000 bytes
+  set cos 3
+ class UMPLSBHv3_DC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 200000 bytes
+  set cos 2
+ class UMPLSBHv3_DC1-OUT
+  bandwidth remaining percent 25 
+  queue-limit 300000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 1 150000 bytes 300000 bytes
+  set cos 1
+ class class-default
+  bandwidth remaining percent 10 
+  queue-limit 200000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 100000 bytes 200000 bytes
+  set cos 0
+policy-map TSFv3_ANTENNE_VL_HSPA-OUT
+ class TSFv3_DC567-OUT
+  priority percent 50
+  queue-limit 100000 bytes
+ class TSFv3_DC34-OUT
+  bandwidth remaining percent 30 
+  queue-limit 100000 bytes
+ class TSFv3_DC2-OUT
+  bandwidth remaining percent 20 
+  queue-limit 200000 bytes
+ class TSFv3_DC1-OUT
+  bandwidth remaining percent 30 
+  queue-limit 300000 bytes
+ class class-default
+  bandwidth remaining percent 20 
+  queue-limit 200000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 100000 bytes 200000 bytes
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback4
+ description IP Gestion/convergence primaire
+ ip address 10.1.1.12 255.255.255.255
+ ip ospf 4000 area 127
+ ip ospf cost 1
+!
+interface GigabitEthernet0/0/0
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/1
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/2
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/3
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/4
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/5
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/6
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/7
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/8
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/9
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/10
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/11
+ no ip address
+ media-type auto-select
+ negotiation auto
+ cdp enable
+!
+interface TenGigabitEthernet0/0/12
+ mtu 5000
+ no ip address
+ load-interval 30
+ carrier-delay up 2
+ carrier-delay down msec 0
+ cdp enable
+ service instance 912 ethernet
+  encapsulation untagged
+  l2protocol peer cdp lldp
+  service-policy input STATSv3_GW21-IN-10G
+  bridge-domain 912
+ !
+!
+interface TenGigabitEthernet0/0/13
+ mtu 5000
+ no ip address
+ load-interval 30
+ carrier-delay up 2
+ carrier-delay down msec 0
+ cdp enable
+ service instance 913 ethernet
+  encapsulation untagged
+  l2protocol peer cdp lldp
+  service-policy input STATSv3_GW21-IN-10G
+  bridge-domain 913
+ !
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ ip address 198.18.188.3 255.255.192.0
+ no ip proxy-arp
+ negotiation auto
+ cdp enable
+!
+interface BDI912
+ description Te0/0/12
+ dampening
+ ip address 10.101.1.10 255.255.255.252
+ ip mtu 5000
+ ip ospf network point-to-point
+ ip ospf mtu-ignore
+ ip ospf 4000 area 127
+ ip ospf cost 10
+ load-interval 30
+ carrier-delay msec 0
+ mpls ip
+ mpls mtu 5000
+ bfd interval 10 min_rx 10 multiplier 3
+ no lldp transmit
+ no lldp receive
+!
+interface BDI913
+ description Te0/0/13
+ dampening
+ ip address 10.101.1.14 255.255.255.252
+ ip mtu 5000
+ ip ospf network point-to-point
+ ip ospf mtu-ignore
+ ip ospf 4000 area 127
+ ip ospf cost 10
+ load-interval 30
+ carrier-delay msec 0
+ mpls ip
+ mpls mtu 5000
+ bfd interval 10 min_rx 10 multiplier 3
+ no lldp transmit
+ no lldp receive
+!
+router ospf 4000
+ router-id 10.1.1.12
+ max-metric router-lsa external-lsa on-startup 300
+ auto-cost reference-bandwidth 4000000
+ prefix-suppression
+ timers throttle spf 50 200 5000
+ timers throttle lsa 50 200 5000
+ timers lsa arrival 100
+ timers pacing flood 5
+ mpls ldp sync
+!
+ip forward-protocol nd
+!
+ip extcommunity-list standard RT_IMPORT_TSF-MRCPE102-OAM-VRF permit rt 65432:4010700020
+ip bgp-community new-format
+ip ftp source-interface GigabitEthernet0
+no ip http server
+no ip http secure-server
+ip tftp source-interface GigabitEthernet0
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 198.18.128.1
+!
+ip access-list extended NTP_ACCESS
+ permit udp host 10.23.2.56 any eq ntp
+ permit udp host 10.23.2.57 any eq ntp
+ permit udp host 10.23.2.58 any eq ntp
+!
+!
+ip prefix-list ENODEB_STJACQUES seq 50 permit 10.216.193.108/30
+!
+ip prefix-list GESTION-filter-routes seq 10 permit 172.23.120.64/30
+ip prefix-list GESTION-filter-routes seq 20 permit 172.23.120.68/30
+ip prefix-list GESTION-filter-routes seq 30 permit 172.23.120.72/30
+ip prefix-list GESTION-filter-routes seq 40 permit 172.23.120.76/30
+ip prefix-list GESTION-filter-routes seq 50 permit 172.23.120.80/30
+ip prefix-list GESTION-filter-routes seq 60 permit 172.23.120.84/30
+ip prefix-list GESTION-filter-routes seq 500 permit 0.0.0.0/0
+ip prefix-list GESTION-filter-routes seq 1000 deny 0.0.0.0/0 le 32
+!
+ip prefix-list OAM-filter-routes seq 10 deny 10.216.0.0/16 le 32
+ip prefix-list OAM-filter-routes seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list PoC_Samsung seq 10 permit 10.216.7.148/30
+ip prefix-list PoC_Samsung seq 11 permit 10.216.7.192/30
+ip prefix-list PoC_Samsung seq 12 permit 10.216.132.168/30
+!
+ip prefix-list Server_Astellia_OAM_TSF seq 10 permit 10.208.45.32/28 le 32
+ip sla responder
+logging alarm informational
+logging trap debugging
+logging origin-id hostname
+access-list 10 permit 10.23.100.40
+access-list 10 permit 10.23.100.30
+access-list 10 permit 10.23.132.25
+access-list 10 permit 10.23.130.118
+access-list 10 permit 10.23.100.8 0.0.0.1
+access-list 10 permit 172.16.10.0 0.0.0.255
+access-list 10 permit 10.10.8.0 0.0.3.255
+access-list 10 permit 192.168.169.0 0.0.0.255
+access-list 10 permit 10.23.84.0 0.0.0.31
+access-list 10 permit 10.23.119.0 0.0.0.63
+access-list 10 permit 10.23.131.0 0.0.0.255
+access-list 10 permit 10.23.131.0 0.0.0.127
+access-list 10 permit 10.23.119.52 0.0.0.1
+ip access-list extended 101
+ permit ip host 10.216.7.209 host 10.216.7.210
+!
+route-map SET-MED-1000 permit 10 
+ set metric 1000
+!
+route-map GESTION-filter-RM permit 10 
+ match ip address prefix-list GESTION-filter-routes
+!
+route-map EXPORT-LTE-402048 permit 10 
+ description --- Export vers vrf RAN_SDS sur les RI Monteal ---
+ match ip address prefix-list ENODEB_STJACQUES
+ set community 65502:40009 additive
+!
+route-map EXPORT-LTE-402048 permit 20 
+ description ---  permit all  ---
+!
+route-map OAM-filter-RM permit 7 
+ match ip address prefix-list PoC_Samsung
+!
+route-map OAM-filter-RM permit 8 
+ match ip address prefix-list Server_Astellia_OAM_TSF
+!
+route-map OAM-filter-RM deny 9 
+ match extcommunity RT_IMPORT_TSF-MRCPE102-OAM-VRF
+!
+route-map OAM-filter-RM permit 10 
+ match ip address prefix-list OAM-filter-routes
+!
+mpls ldp router-id Loopback4 force
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 5
+ exec-timeout 180 0
+ privilege level 15
+ logging synchronous
+ login local
+ transport input all
+!
+ 
+ntp server vrf Mgmt-intf 198.18.128.1
+!
+
+!
+end

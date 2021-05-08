@@ -1,0 +1,756 @@
+Building configuration...
+!! IOS XR Configuration 
+!! Last configuration change at Wed May  5 22:46:06 2021 by cisco
+!
+hostname soda11
+clock timezone EST America/Montreal
+logging trap debugging
+logging archive
+ device harddisk
+ severity debugging
+ file-size 1
+ frequency daily
+ archive-size 1000
+ archive-length 104
+!
+logging console warning
+logging monitor debugging
+logging buffered 2500000
+logging buffered debugging
+logging source-interface Loopback4
+logging suppress duplicates
+service timestamps log datetime localtime msec show-timezone
+service timestamps debug datetime localtime msec show-timezone
+logging events link-status software-interfaces
+domain lookup disable
+username cisco
+ group root-lr
+ group cisco-support
+ secret 10 $6$2wToX1z5xsFDCX1.$PNrMweS84pVaoqRiKXczRe/1rkVtE8wyBQkoq8r4xsQghyyagSFObkS9BLvDHt1h3.uGkp2L6ebzNYn1OvznB/
+!
+vrf Mgmt-intf
+ address-family ipv4 unicast
+ !
+!
+vrf OAM-SS-BH
+ description OAM-SS-BH
+ address-family ipv4 unicast
+  import route-policy OAM-filter-RM
+  import route-target
+   65432:4020570020
+   65432:4020590020
+   65432:4030970000
+   65432:4030980000
+  !
+  export route-target
+   65432:4020961612
+  !
+  maximum prefix 300 75
+ !
+!
+vrf LTE-402048
+ description LTE-402048
+ address-family ipv4 unicast
+  import route-target
+   65432:4020480020
+   65432:4020481612
+   65432:4020641620
+   65432:4030521610
+   65432:4030550020
+  !
+  export route-target
+   65432:4020481612
+  !
+  maximum prefix 4000 75
+ !
+!
+vrf OAM-402058
+ description OAM-402058
+ address-family ipv4 unicast
+  import route-policy OAM-filter-RM
+  import route-target
+   65432:4020570020
+   65432:4020590020
+   65432:4020621620
+  !
+  export route-target
+   65432:4020581612
+  !
+  maximum prefix 300 75
+ !
+!
+vrf TSF-401030
+ description TSF-401030
+ address-family ipv4 unicast
+  import route-target
+   65432:4010220200
+   65432:4010220700
+   65432:4010220800
+   65432:4010310000
+   65432:4010750020
+  !
+  export route-target
+   65432:4010300010
+  !
+  maximum prefix 200 75
+ !
+!
+vrf GESTION-UMPLS
+ description GESTION-UMPLS
+ address-family ipv4 unicast
+  import route-policy GESTION-filter-RM
+  import route-target
+   65432:4019901111
+   65432:4019903333
+  !
+  export route-target
+   65432:4019903333
+  !
+  maximum prefix 100 75
+ !
+!
+tcp mss 10000
+tcp window-size 65535
+tcp path-mtu-discovery
+call-home
+ service active
+ contact smart-licensing
+ profile CiscoTAC-1
+  active
+  destination transport-method http
+ !
+!
+ipv4 access-list ntp-serve-only
+ 10 permit ipv4 host 10.23.2.56 any
+ 20 permit ipv4 host 10.23.2.57 any
+ 30 permit ipv4 host 10.23.2.58 any
+ 40 deny ipv4 any any
+!
+ipv4 access-list LOOPBACKS-DORSALE-AGICS
+ 10 permit ipv4 10.0.0.0 0.255.255.255 any
+ 100 deny ipv4 any any
+!
+class-map match-any BHv1_PREC_EXP_1-IN
+ match mpls experimental topmost 1 
+ match precedence 1 
+ end-class-map
+! 
+class-map match-any BHv1_PREC_EXP_2-IN
+ match mpls experimental topmost 2 
+ match precedence 2 
+ end-class-map
+! 
+class-map match-any BHv1_PREC_EXP_3-IN
+ match mpls experimental topmost 3 
+ match precedence 3 
+ end-class-map
+! 
+class-map match-any BHv1_PREC_EXP_4-IN
+ match mpls experimental topmost 4 
+ match precedence 4 
+ end-class-map
+! 
+class-map match-any BHv1_PREC_EXP_5-IN
+ match mpls experimental topmost 5 
+ match precedence 5 
+ end-class-map
+! 
+class-map match-any BHv1_PREC_EXP_6-IN
+ match mpls experimental topmost 6 
+ match precedence 6 
+ end-class-map
+! 
+class-map match-any BHv1_PREC_EXP_7-IN
+ match mpls experimental topmost 7 
+ match precedence 7 
+ end-class-map
+! 
+class-map match-any BHv1-QOS-GROUP-1-OUT
+ match qos-group 1 
+ end-class-map
+! 
+class-map match-any BHv1-QOS-GROUP-2-OUT
+ match qos-group 2 
+ end-class-map
+! 
+class-map match-any BHv1-QOS-GROUP-3-OUT
+ match qos-group 3 
+ end-class-map
+! 
+class-map match-any BHv1-QOS-GROUP-4-OUT
+ match qos-group 4 
+ end-class-map
+! 
+class-map match-any BHv1-QOS-GROUP-5-OUT
+ match qos-group 5 
+ end-class-map
+! 
+class-map match-any BHv1-QOS-GROUP-6-OUT
+ match qos-group 6 
+ end-class-map
+! 
+class-map match-any BHv1-QOS-GROUP-7-OUT
+ match qos-group 7 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_TC1-OUT
+ match traffic-class 1 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_TC2-OUT
+ match traffic-class 2 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_TC3-OUT
+ match traffic-class 3 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_TC4-OUT
+ match traffic-class 4 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_TC5-OUT
+ match traffic-class 5 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_TC6-OUT
+ match traffic-class 6 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_TC7-OUT
+ match traffic-class 7 
+ end-class-map
+! 
+class-map match-any TSFv1_HSPA_to_QG_TC1-IN
+ match precedence 1 
+ end-class-map
+! 
+class-map match-any TSFv1_HSPA_to_QG_TC2-IN
+ match precedence 2 
+ end-class-map
+! 
+class-map match-any TSFv1_HSPA_to_QG_TC3-IN
+ match precedence 3 
+ end-class-map
+! 
+class-map match-any TSFv1_HSPA_to_QG_TC4-IN
+ match precedence 4 
+ end-class-map
+! 
+class-map match-any TSFv1_HSPA_to_QG_TC5-IN
+ match precedence 5 
+ end-class-map
+! 
+class-map match-any TSFv1_HSPA_to_QG_TC6-IN
+ match precedence 6 
+ end-class-map
+! 
+class-map match-any TSFv1_HSPA_to_QG_TC7-IN
+ match precedence 7 
+ end-class-map
+! 
+class-map match-any BHv1-TRAFFIC-CLASS-1-OUT
+ match traffic-class 1 
+ end-class-map
+! 
+class-map match-any BHv1-TRAFFIC-CLASS-2-OUT
+ match traffic-class 2 
+ end-class-map
+! 
+class-map match-any BHv1-TRAFFIC-CLASS-3-OUT
+ match traffic-class 3 
+ end-class-map
+! 
+class-map match-any BHv1-TRAFFIC-CLASS-4-OUT
+ match traffic-class 4 
+ end-class-map
+! 
+class-map match-any BHv1-TRAFFIC-CLASS-5-OUT
+ match traffic-class 5 
+ end-class-map
+! 
+class-map match-any BHv1-TRAFFIC-CLASS-6-OUT
+ match traffic-class 6 
+ end-class-map
+! 
+class-map match-any BHv1-TRAFFIC-CLASS-7-OUT
+ match traffic-class 7 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_DSCP_to_QG_TC1-IN
+ match dscp af11 af12 af13 af21 af22 af23 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_DSCP_to_QG_TC3-IN
+ match dscp cs3 af31 af33 af42 af43 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_DSCP_to_QG_TC4-IN
+ match dscp cs4 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_DSCP_to_QG_TC5-IN
+ match dscp ef 
+ end-class-map
+! 
+class-map match-any TSFv1_VL_RCI_DSCP_to_QG_TC6-IN
+ match dscp cs5 cs6 51 54 
+ end-class-map
+! 
+policy-map MPLS_XR_v1-IN
+ class BHv1_PREC_EXP_7-IN
+  police rate percent 100 
+  ! 
+  set qos-group 7
+  set traffic-class 7
+ ! 
+ class BHv1_PREC_EXP_6-IN
+  police rate percent 100 
+  ! 
+  set qos-group 6
+  set traffic-class 6
+ ! 
+ class BHv1_PREC_EXP_5-IN
+  police rate percent 100 
+  ! 
+  set qos-group 5
+  set traffic-class 5
+ ! 
+ class BHv1_PREC_EXP_4-IN
+  police rate percent 100 
+  ! 
+  set qos-group 4
+  set traffic-class 4
+ ! 
+ class BHv1_PREC_EXP_3-IN
+  police rate percent 100 
+  ! 
+  set qos-group 3
+  set traffic-class 3
+ ! 
+ class BHv1_PREC_EXP_2-IN
+  police rate percent 100 
+  ! 
+  set qos-group 2
+  set traffic-class 2
+ ! 
+ class BHv1_PREC_EXP_1-IN
+  police rate percent 100 
+  ! 
+  set qos-group 1
+  set traffic-class 1
+ ! 
+ class class-default
+  police rate percent 100 
+  ! 
+  set qos-group 0
+  set traffic-class 0
+ ! 
+ end-policy-map
+! 
+policy-map MPLS_XR_v1_MARKING-OUT
+ class BHv1-QOS-GROUP-7-OUT
+  set mpls experimental imposition 7
+  set cos 7
+ ! 
+ class BHv1-QOS-GROUP-6-OUT
+  set mpls experimental imposition 6
+  set cos 6
+ ! 
+ class BHv1-QOS-GROUP-5-OUT
+  set mpls experimental imposition 5
+  set cos 5
+ ! 
+ class BHv1-QOS-GROUP-4-OUT
+  set mpls experimental imposition 4
+  set cos 4
+ ! 
+ class BHv1-QOS-GROUP-3-OUT
+  set mpls experimental imposition 3
+  set cos 3
+ ! 
+ class BHv1-QOS-GROUP-2-OUT
+  set mpls experimental imposition 2
+  set cos 2
+ ! 
+ class BHv1-QOS-GROUP-1-OUT
+  set mpls experimental imposition 1
+  set cos 1
+ ! 
+ class class-default
+  set mpls experimental imposition 0
+  set cos 0
+ ! 
+ end-policy-map
+! 
+policy-map MPLS_XR_v1_QUEUING-OUT
+ class BHv1-TRAFFIC-CLASS-5-OUT
+  priority level 1 
+  shape average percent 50 
+  queue-limit 200 us 
+ ! 
+ class BHv1-TRAFFIC-CLASS-7-OUT
+  bandwidth remaining percent 5 
+  queue-limit 50 ms 
+ ! 
+ class BHv1-TRAFFIC-CLASS-6-OUT
+  bandwidth remaining percent 5 
+  queue-limit 50 ms 
+ ! 
+ class BHv1-TRAFFIC-CLASS-4-OUT
+  bandwidth remaining percent 25 
+  queue-limit 50 ms 
+ ! 
+ class BHv1-TRAFFIC-CLASS-3-OUT
+  bandwidth remaining percent 20 
+  queue-limit 100 ms 
+ ! 
+ class BHv1-TRAFFIC-CLASS-2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 125 ms 
+ ! 
+ class BHv1-TRAFFIC-CLASS-1-OUT
+  bandwidth remaining percent 25 
+  random-detect 50 ms 100 ms 
+ ! 
+ class class-default
+  bandwidth remaining percent 10 
+  random-detect 60 ms 125 ms 
+ ! 
+ end-policy-map
+! 
+policy-map TSFv1_ANTENNE_VL_LTE-IN
+ class TSFv1_VL_RCI_DSCP_to_QG_TC6-IN
+  police rate percent 100 
+  ! 
+  set qos-group 6
+  set traffic-class 6
+ ! 
+ class TSFv1_VL_RCI_DSCP_to_QG_TC5-IN
+  police rate percent 100 
+  ! 
+  set qos-group 5
+  set traffic-class 5
+ ! 
+ class TSFv1_VL_RCI_DSCP_to_QG_TC4-IN
+  police rate percent 100 
+  ! 
+  set qos-group 4
+  set traffic-class 4
+ ! 
+ class TSFv1_VL_RCI_DSCP_to_QG_TC3-IN
+  police rate percent 100 
+  ! 
+  set qos-group 3
+  set traffic-class 3
+ ! 
+ class TSFv1_VL_RCI_DSCP_to_QG_TC1-IN
+  police rate percent 100 
+  ! 
+  set qos-group 1
+  set traffic-class 1
+ ! 
+ class class-default
+  police rate percent 100 
+  ! 
+  set qos-group 0
+  set traffic-class 0
+ ! 
+ end-policy-map
+! 
+policy-map TSFv1_ANTENNE_HSPA_VL-IN
+ class TSFv1_HSPA_to_QG_TC6-IN
+  police rate percent 100 
+  ! 
+  set qos-group 6
+  set traffic-class 6
+ ! 
+ class TSFv1_HSPA_to_QG_TC5-IN
+  police rate percent 100 
+  ! 
+  set qos-group 5
+  set traffic-class 5
+ ! 
+ class TSFv1_HSPA_to_QG_TC4-IN
+  police rate percent 100 
+  ! 
+  set qos-group 4
+  set traffic-class 4
+ ! 
+ class TSFv1_HSPA_to_QG_TC3-IN
+  police rate percent 100 
+  ! 
+  set qos-group 3
+  set traffic-class 3
+ ! 
+ class TSFv1_HSPA_to_QG_TC2-IN
+  police rate percent 100 
+  ! 
+  set qos-group 2
+  set traffic-class 2
+ ! 
+ class TSFv1_HSPA_to_QG_TC1-IN
+  police rate percent 100 
+  ! 
+  set qos-group 1
+  set traffic-class 1
+ ! 
+ class class-default
+  police rate percent 100 
+  ! 
+  set qos-group 0
+  set traffic-class 0
+ ! 
+ end-policy-map
+! 
+policy-map TSFv1_ANTENNE_VL_LTE_QUEUING-OUT
+ class TSFv1_VL_RCI_TC5-OUT
+  priority level 1 
+  shape average percent 50 
+  queue-limit 200 us 
+ ! 
+ class TSFv1_VL_RCI_TC6-OUT
+  bandwidth remaining percent 20 
+  queue-limit 50 ms 
+ ! 
+ class TSFv1_VL_RCI_TC4-OUT
+  bandwidth remaining percent 20 
+  queue-limit 50 ms 
+ ! 
+ class TSFv1_VL_RCI_TC3-OUT
+  bandwidth remaining percent 15 
+  queue-limit 100 ms 
+ ! 
+ class TSFv1_VL_RCI_TC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 125 ms 
+ ! 
+ class TSFv1_VL_RCI_TC1-OUT
+  bandwidth remaining percent 20 
+  random-detect 50 ms 100 ms 
+ ! 
+ class class-default
+  bandwidth remaining percent 15 
+  random-detect 60 ms 125 ms 
+ ! 
+ end-policy-map
+! 
+policy-map TSFv1_ANTENNE_VL_HSPA_QUEUING-OUT
+ class TSFv1_VL_RCI_TC5-OUT
+  priority level 1 
+  shape average percent 50 
+  queue-limit 200 us 
+ ! 
+ class TSFv1_VL_RCI_TC7-OUT
+  bandwidth remaining percent 10 
+  queue-limit 50 ms 
+ ! 
+ class TSFv1_VL_RCI_TC6-OUT
+  bandwidth remaining percent 10 
+  queue-limit 50 ms 
+ ! 
+ class TSFv1_VL_RCI_TC4-OUT
+  bandwidth remaining percent 20 
+  queue-limit 50 ms 
+ ! 
+ class TSFv1_VL_RCI_TC3-OUT
+  bandwidth remaining percent 15 
+  queue-limit 100 ms 
+ ! 
+ class TSFv1_VL_RCI_TC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 125 ms 
+ ! 
+ class TSFv1_VL_RCI_TC1-OUT
+  bandwidth remaining percent 20 
+  random-detect 50 ms 100 ms 
+ ! 
+ class class-default
+  bandwidth remaining percent 15 
+  random-detect 60 ms 125 ms 
+ ! 
+ end-policy-map
+! 
+interface Loopback4
+ description IP Gestion
+ ipv4 address 10.1.1.5 255.255.255.255
+!
+interface MgmtEth0/RP0/CPU0/0
+ vrf Mgmt-intf
+ ipv4 address 198.18.188.11 255.255.192.0
+!
+interface GigabitEthernet0/0/0/4
+ description to Gi0/0/0.soda5.green.ring
+!
+interface GigabitEthernet0/0/0/5
+ description to Gi0/0/2.soda5.green.ring
+!
+interface TenGigE0/0/0/16
+ description to Te0/0/0/17.soda17.blue.ring
+ mtu 5014
+ ipv4 address 10.100.1.14 255.255.255.252
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+interface TenGigE0/0/0/17
+ description to Te0/0/0/16.soda14.blue.ring
+ mtu 5014
+ ipv4 address 10.100.1.18 255.255.255.252
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+interface TenGigE0/0/0/18
+ description to Te0/0/13.soda5.red.ring
+ mtu 5014
+ ipv4 address 10.101.1.29 255.255.255.252
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+interface TenGigE0/0/0/19
+ description to Te0/0/0/6.tesla.black.ring
+ mtu 5014
+ ipv4 address 10.103.1.13 255.255.255.252
+ lldp
+  enable
+ !
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+interface TenGigE0/0/0/20
+ description to Spirent.black.ring
+!
+interface TenGigE0/0/0/21
+ description to Calnex
+!
+interface TenGigE0/0/0/22
+ description to Calnex
+!
+interface preconfigure GigabitEthernet0/0/0/16
+ shutdown
+!
+!
+prefix-set GESTION-filter-routes
+  172.23.120.64/30,
+  172.23.120.68/30,
+  172.23.120.72/30,
+  172.23.120.76/30,
+  172.23.120.80/30,
+  172.23.120.84/30,
+  0.0.0.0/0
+end-set
+!
+route-policy BGP-ADD-PATH
+  set path-selection all advertise
+end-policy
+!
+route-policy SET-MED-1000
+  set med 1000
+end-policy
+!
+route-policy OAM-filter-RM
+  if destination in (10.216.0.0/16 le 32) then
+    drop
+  elseif destination in (0.0.0.0/0 le 32) then
+    pass
+  endif
+end-policy
+!
+route-policy GESTION-filter-RM
+  if destination in GESTION-filter-routes then
+    pass
+  else
+    drop
+  endif
+end-policy
+!
+router static
+ vrf Mgmt-intf
+  address-family ipv4 unicast
+   0.0.0.0/0 198.18.128.1
+  !
+ !
+!
+router ospf 4000
+ log adjacency changes
+ router-id 10.1.1.5
+ bfd minimum-interval 10
+ bfd multiplier 3
+ mpls ldp sync
+ prefix-suppression
+ timers throttle lsa all 50 200 5000
+ timers throttle spf 50 200 5000
+ timers lsa min-arrival 100
+ timers pacing flood 5
+ auto-cost reference-bandwidth 4000000
+ max-metric router-lsa on-startup 300
+ area 127
+  mpls ldp auto-config
+  interface Loopback4
+   cost 1
+   passive enable
+  !
+  interface TenGigE0/0/0/16
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+  interface TenGigE0/0/0/17
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+  interface TenGigE0/0/0/18
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+  interface TenGigE0/0/0/19
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+ !
+!
+mpls oam
+!
+mpls ldp
+ log
+  neighbor
+  nsr
+  graceful-restart
+ !
+ igp sync delay on-session-up 10
+ router-id 10.1.1.5
+ session protection
+ address-family ipv4
+  label
+   local
+    allocate for host-routes
+    advertise
+     for LOOPBACKS-DORSALE-AGICS
+     explicit-null
+    !
+   !
+  !
+ !
+!
+lldp
+!
+ssh server v2
+ssh server vrf default
+ssh server vrf Mgmt-intf
+hw-module profile qos hqos-enable
+end

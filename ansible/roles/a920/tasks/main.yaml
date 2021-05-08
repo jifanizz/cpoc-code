@@ -1,0 +1,4 @@
+---
+- name: Generate NCS540 Configs
+  template: src=a920.j2 dest=/Users/jifanizz/pyATS/cpoc/ansible/CONFIGS/{{item.hostname}}.cfg
+  with_items: "{{ routers }}"

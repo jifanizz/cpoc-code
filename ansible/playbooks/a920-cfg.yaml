@@ -1,0 +1,12 @@
+- hosts: a920
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+  - name: push config file
+    cisco.ios.ios_config:
+       src: "/Users/jifanizz/pyATS/cpoc/ansible/CONFIGS/{{ inventory_hostname }}.cfg"
+
+  - name: save running config
+    cisco.ios.ios_config:
+       save_when: modified

@@ -1,0 +1,13 @@
+- hosts: soda2
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+  - name: Execute show ver
+    cisco.ios.ios_command:
+      commands: show version
+    register: ios_version
+
+  - name: show output
+    debug:
+      var: ios_version.stdout
