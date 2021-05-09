@@ -6,6 +6,7 @@ from genie.testbed import load
 testbed = load('../n540.yaml')
 uut = testbed.devices['soda14']
 
+
 golden_ospf_neighbors=['10.1.1.22', '10.1.1.111','10.1.1.11']
 
 # Connect to device

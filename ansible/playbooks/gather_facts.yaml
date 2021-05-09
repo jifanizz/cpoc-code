@@ -1,7 +1,7 @@
 ---
 
 - name: CONFIGURE DEVICES
-  hosts: xr
+  hosts: soda14
   gather_facts: false
 
   tasks:
@@ -13,8 +13,8 @@
     - name: Print Facts
       #when: xr_facts.ansible_facts.ansible_net_version == '6.3.2[Default]'
       debug:
-        #var: xr_facts
-        msg:
+        var: xr_facts
+        #msg:
           #- "Hostname: {{xr_facts.ansible_facts.ansible_net_hostname}}"
           #- "Version: {{xr_facts.ansible_facts.ansible_net_version}}"
-          - "OS: {{xr_facts.ansible_facts.ansible_net_system}}"
+          #- "OS: {{xr_facts.ansible_facts.ansible_net_system}}"

@@ -103,6 +103,7 @@ class Verify_Golden_OSPF_Neighbor_Peer(aetest.Testcase):
                 peer_ip=nbr_peer[nbr_ip]['neighbor_router_id']
                 print(peer_ip)
                 peer_list.append(peer_ip)
+                
         
         print(peer_list)
         # Validate that OSPF Peer IP Addresses are in the Golden OSPF Neighbor List
