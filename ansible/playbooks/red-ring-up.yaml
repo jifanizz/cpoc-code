@@ -1,0 +1,127 @@
+- hosts: soda14
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+
+  - name: Shutdown red ring interface (Te0/0/0/19) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/19
+  
+  - name: Enable blue ring interface (Te0/0/0/17) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/17
+
+- hosts: soda15
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+
+  - name: Shutdown red ring interface (Te0/0/0/18) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/18
+  
+  - name: Shutdown red ring interface (Te0/0/0/19) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/19
+
+  - name: Enable blue ring interface (Te0/0/0/16) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/16
+  
+  - name: Shutdown red ring interface (Te0/0/0/17) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/17
+
+- hosts: soda16
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+
+  - name: Shutdown red ring interface (Te0/0/0/18) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/18
+  
+  - name: Shutdown red ring interface (Te0/0/0/19) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/19
+
+  - name: Enable blue ring interface (Te0/0/0/16) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/16
+  
+  - name: Shutdown red ring interface (Te0/0/0/17) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/17
+
+- hosts: soda17
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+
+  - name: Shutdown red ring interface (Te0/0/0/18) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/18
+  
+  - name: Shutdown red ring interface (Te0/0/0/19) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/19
+
+  - name: Enable blue ring interface (Te0/0/0/16) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/16
+  
+  - name: Shutdown red ring interface (Te0/0/0/17) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/17
+
+
+- hosts: soda11
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+
+  - name: Shutdown red ring interface (Te0/0/0/18) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - no shutdown
+      parents: interface TenGigE0/0/0/18
+  
+  - name: Enable blue ring interface (Te0/0/0/16) on {{ inventory_hostname }}
+    cisco.iosxr.iosxr_config:
+      lines:
+      - shutdown
+      parents: interface TenGigE0/0/0/16
+  
