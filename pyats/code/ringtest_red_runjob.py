@@ -6,7 +6,7 @@ from ats.easypy import run
 
 def main():
     # Find the location of the script in relation to the job file
-    blue_ring = os.path.join('code/blue-ringtest.py')
+    blue_ring = os.path.join('code/red-ringtest.py')
 
     # Execute the testscript
     run(testscript=blue_ring)
