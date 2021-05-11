@@ -1,0 +1,38 @@
+---
+
+- name: Backup ASR920 Configs
+  hosts: a920
+  gather_facts: false
+
+  tasks:
+  - name: configurable backup path
+    cisco.ios.ios_config:
+      backup: yes
+
+- name: Backup ASR902 Configs
+  hosts: a902
+  gather_facts: false
+
+  tasks:
+  - name: configurable backup path
+    cisco.ios.ios_config:
+      backup: yes
+
+- name: Backup N540 Configs
+  hosts: n540
+  gather_facts: false
+
+  tasks:
+  - name: configurable backup path
+    cisco.iosxr.iosxr_config:
+      backup: yes
+
+- name: Backup ASR9K Configs
+  hosts: asr9k
+  gather_facts: false
+
+  tasks:
+  - name: configurable backup path
+    cisco.iosxr.iosxr_config:
+      backup: yes
+      

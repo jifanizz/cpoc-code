@@ -8,9 +8,19 @@ ansible_user=cisco
 ansible_ssh_pass=cisco
 ansible_network_os=ios
 
+[a902:vars]
+ansible_user=cisco
+ansible_ssh_pass=cisco
+ansible_network_os=ios
+
 [n540:vars]
 ansible_user=cisco
 ansible_ssh_pass=Cisco@123
+ansible_network_os=iosxr
+
+[asr9k:vars]
+ansible_user=admin
+ansible_ssh_pass=cisco123
 ansible_network_os=iosxr
 
 [a920]
@@ -19,9 +29,17 @@ soda3 ansible_host=198.18.188.3
 soda4 ansible_host=198.18.188.4
 soda5 ansible_host=198.18.188.5
 
+[a902]
+soda6 ansible_host=198.18.188.6
+
 [n540]
 soda11 ansible_host=198.18.188.11
 soda14 ansible_host=198.18.188.14
 soda15 ansible_host=198.18.188.15
 soda16 ansible_host=198.18.188.16
 soda17 ansible_host=198.18.188.17
+
+[asr9k]
+tesla ansible_host=198.18.186.135
+lexus ansible_host=198.18.186.131
+

@@ -1,0 +1,261 @@
+Building configuration...
+!! IOS XR Configuration 6.6.3
+!! Last configuration change at Mon May 10 17:59:38 2021 by admin
+!
+service unsupported-transceiver
+hostname tesla
+clock timezone EST -5
+clock summer-time EDT date march 13 2011 03:00 november 6 2011 02:00
+service timestamps log datetime msec
+service timestamps debug datetime msec
+domain lookup disable
+telnet vrf default ipv4 server max-servers 100
+telnet vrf Mgmt-intf ipv4 server max-servers 100
+cdp
+vrf Mgmt-intf
+ address-family ipv4 unicast
+ !
+!
+tcp path-mtu-discovery
+line default
+ exec-timeout 0 0
+ absolute-timeout 10000
+ session-timeout 30000
+ transport input all
+!
+vty-pool default 0 99
+snmp-server community public RO
+snmp-server community private RW
+ntp
+ server vrf Mgmt-intf 198.18.128.1
+ update-calendar
+!
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+interface Loopback0
+ ipv4 address 10.1.1.102 255.255.255.255
+!
+interface MgmtEth0/RSP1/CPU0/0
+ vrf Mgmt-intf
+ ipv4 address 198.18.186.135 255.255.192.0
+!
+interface MgmtEth0/RSP1/CPU0/1
+ shutdown
+!
+interface TenGigE0/0/0/0
+ description to Te0/0/0/6.tesla.black.ring
+ cdp
+ mtu 9216
+ ipv4 address 10.101.1.18 255.255.255.252
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+interface TenGigE0/0/0/1
+ cdp
+!
+interface TenGigE0/0/0/2
+ cdp
+!
+interface TenGigE0/0/0/3
+ cdp
+!
+interface TenGigE0/0/0/4
+ cdp
+!
+interface TenGigE0/0/0/5
+ cdp
+!
+interface TenGigE0/0/0/6
+ description to Te0/0/0/19.soda11.black.ring
+ cdp
+ mtu 9216
+ ipv4 address 10.103.1.14 255.255.255.252
+ carrier-delay up 2 down 0
+ load-interval 30
+ dampening
+!
+interface TenGigE0/0/0/7
+ cdp
+!
+interface TenGigE0/0/0/8
+ cdp
+!
+interface TenGigE0/0/0/9
+ cdp
+!
+interface TenGigE0/0/0/10
+ cdp
+!
+interface TenGigE0/0/0/11
+ cdp
+!
+interface TenGigE0/0/0/12
+ cdp
+!
+interface TenGigE0/0/0/13
+ cdp
+!
+interface TenGigE0/0/0/14
+ cdp
+!
+interface TenGigE0/0/0/15
+ cdp
+!
+interface TenGigE0/0/0/16
+ cdp
+!
+interface TenGigE0/0/0/17
+ cdp
+!
+interface TenGigE0/0/0/18
+ cdp
+!
+interface TenGigE0/0/0/19
+ cdp
+!
+interface TenGigE0/0/0/20
+ cdp
+!
+interface TenGigE0/0/0/21
+ cdp
+!
+interface TenGigE0/0/0/22
+ cdp
+!
+interface TenGigE0/0/0/23
+ cdp
+!
+interface PTP0/RSP1/CPU0/0
+ shutdown
+!
+interface preconfigure MgmtEth0/RSP0/CPU0/0
+ cdp
+ vrf Mgmt-intf
+!
+interface preconfigure TenGigE0/1/0/0
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/1
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/2
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/3
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/4
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/5
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/6
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/7
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/8
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/9
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/10
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/11
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/12
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/13
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/14
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/15
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/16
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/17
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/18
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/19
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/20
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/21
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/22
+ shutdown
+!
+interface preconfigure TenGigE0/1/0/23
+ shutdown
+!
+!
+route-policy pass-all
+  pass
+end-policy
+!
+router static
+ vrf Mgmt-intf
+  address-family ipv4 unicast
+   0.0.0.0/0 198.18.128.1
+  !
+ !
+!
+router ospf 4000
+ log adjacency changes
+ router-id 10.1.1.102
+ bfd minimum-interval 10
+ bfd multiplier 3
+ mpls ldp sync
+ prefix-suppression
+ timers throttle lsa all 50 200 5000
+ timers throttle spf 50 200 5000
+ timers lsa min-arrival 100
+ timers pacing flood 5
+ max-metric router-lsa on-startup 300
+ area 127
+  mpls ldp auto-config
+  interface Loopback0
+   cost 1
+   passive enable
+  !
+  interface TenGigE0/0/0/0
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+  interface TenGigE0/0/0/6
+   bfd fast-detect
+   network point-to-point
+   mtu-ignore enable
+  !
+ !
+!
+lldp
+!
+ssh server v2
+ssh server vrf Mgmt-intf
+end

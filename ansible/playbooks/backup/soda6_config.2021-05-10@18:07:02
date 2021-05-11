@@ -1,0 +1,462 @@
+Building configuration...
+
+Current configuration : 10824 bytes
+!
+! Last configuration change at 17:58:00 EST Mon May 10 2021
+! NVRAM config last updated at 17:58:22 EST Mon May 10 2021
+!
+version 16.9
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec localtime show-timezone
+platform punt-keepalive disable-kernel-core
+platform bfd-debug-trace 1
+platform xconnect load-balance-hash-algo mac-ip-instanceid
+platform tcam-parity-error enable
+platform tcam-threshold alarm-frequency 1
+!
+hostname soda6
+!
+boot-start-marker
+boot system bootflash:/asr900rsp2-universalk9_npe.16.09.04.SPA.bin
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+logging buffered 32000
+enable password cisco123
+!
+no aaa new-model
+clock timezone EST -5 0
+clock summer-time EST recurring 1 Sun Mar 0:00 2 Sun Nov 0:00
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name cisco.com
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+mpls label protocol ldp
+mpls ldp explicit-null
+mpls ldp graceful-restart
+mpls ldp session protection
+mpls ldp igp sync holddown 1000
+multilink bundle-name authenticated
+!
+!
+!
+license udi pid ASR-902 sn FOX1948P89X
+license boot level metroaggrservices
+no license smart enable
+memory free low-watermark processor 5319
+!
+!
+spanning-tree extend system-id
+sdm prefer default 
+diagnostic bootup level minimal
+!
+!
+username cisco privilege 15 secret 5 $1$PstE$Il.P.Lkpx0poA8YHOm5hZ1
+!
+redundancy
+!
+!
+!
+!
+controller wanphy 0/0/8
+!
+controller wanphy 0/1/0
+!
+controller wanphy 0/1/1
+!
+!
+transceiver type all
+ monitoring
+cdp run
+!
+lldp timer 5
+lldp run
+!
+!
+class-map match-any STATSv3_PREC_EXP_1-IN
+ match mpls experimental topmost 1 
+ match precedence 1 
+class-map match-any STATSv3_PREC_EXP_2-IN
+ match mpls experimental topmost 2 
+ match precedence 2 
+class-map match-any STATSv3_PREC_EXP_3-IN
+ match mpls experimental topmost 3 
+ match precedence 3 
+class-map match-any STATSv3_PREC_EXP_4-IN
+ match mpls experimental topmost 4 
+ match precedence 4 
+class-map match-any STATSv3_PREC_EXP_5-IN
+ match mpls experimental topmost 5 
+ match precedence 5 
+class-map match-any STATSv3_PREC_EXP_6-IN
+ match mpls experimental topmost 6 
+ match precedence 6 
+class-map match-any STATSv3_PREC_EXP_7-IN
+ match mpls experimental topmost 7 
+ match precedence 7 
+class-map match-any UMPLSBHv3_DC3-OUT
+ match discard-class 3
+class-map match-any UMPLSBHv3_DC2-OUT
+ match discard-class 2
+class-map match-any UMPLSBHv3_DC1-OUT
+ match discard-class 1
+class-map match-any UMPLSBHv3_DC5-OUT
+ match discard-class 5
+class-map match-any UMPLSBHv3_DC4-OUT
+ match discard-class 4
+class-map match-any UMPLSBHv3_DC67-OUT
+ match discard-class 6
+ match discard-class 7
+!
+policy-map UMPLSBHv3_ABR_OUT-10G
+ class UMPLSBHv3_DC5-OUT
+  priority percent 50
+  queue-limit 122880 bytes
+  set cos 5
+  set mpls experimental topmost 5
+ class UMPLSBHv3_DC67-OUT
+  bandwidth remaining percent 10 
+  queue-limit 122880 bytes
+  set cos 6
+  set mpls experimental topmost 6
+ class UMPLSBHv3_DC4-OUT
+  bandwidth remaining percent 25 
+  queue-limit 122880 bytes
+  set cos 4
+  set mpls experimental topmost 4
+ class UMPLSBHv3_DC3-OUT
+  bandwidth remaining percent 20 
+  queue-limit 122880 bytes
+  set cos 3
+  set mpls experimental topmost 3
+ class UMPLSBHv3_DC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 122880 bytes
+  set cos 2
+  set mpls experimental topmost 2
+ class UMPLSBHv3_DC1-OUT
+  bandwidth remaining percent 25 
+  queue-limit 122880 bytes
+  random-detect discard-class-based
+  random-detect discard-class 1 61440 bytes 122880 bytes
+  set cos 1
+  set mpls experimental topmost 1
+ class class-default
+  bandwidth remaining percent 10 
+  queue-limit 400000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 61440 bytes 122880 bytes
+  set cos 0
+  set mpls experimental topmost 0
+policy-map STATSv3_ABR_IN-1G
+ class STATSv3_PREC_EXP_7-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 7
+   exceed-action set-discard-class-transmit 7
+ class STATSv3_PREC_EXP_6-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 6
+   exceed-action set-discard-class-transmit 6
+ class STATSv3_PREC_EXP_5-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 5
+   exceed-action set-discard-class-transmit 5
+ class STATSv3_PREC_EXP_4-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 4
+   exceed-action set-discard-class-transmit 4
+ class STATSv3_PREC_EXP_3-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 3
+   exceed-action set-discard-class-transmit 3
+ class STATSv3_PREC_EXP_2-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 2
+   exceed-action set-discard-class-transmit 2
+ class STATSv3_PREC_EXP_1-IN
+  police cir 1000000000
+   conform-action set-discard-class-transmit 1
+   exceed-action set-discard-class-transmit 1
+ class class-default
+  police cir 1000000000
+   conform-action set-discard-class-transmit 0
+   exceed-action set-discard-class-transmit 0
+policy-map UMPLSBHv3_ABR_OUT-1G
+ class UMPLSBHv3_DC5-OUT
+  priority percent 50
+  queue-limit 200000 bytes
+  set cos 5
+  set mpls experimental topmost 5
+ class UMPLSBHv3_DC67-OUT
+  bandwidth remaining percent 10 
+  queue-limit 300000 bytes
+  set cos 6
+  set mpls experimental topmost 6
+ class UMPLSBHv3_DC4-OUT
+  bandwidth remaining percent 25 
+  queue-limit 300000 bytes
+  set cos 4
+  set mpls experimental topmost 4
+ class UMPLSBHv3_DC3-OUT
+  bandwidth remaining percent 20 
+  queue-limit 300000 bytes
+  set cos 3
+  set mpls experimental topmost 3
+ class UMPLSBHv3_DC2-OUT
+  bandwidth remaining percent 10 
+  queue-limit 400000 bytes
+  set cos 2
+  set mpls experimental topmost 2
+ class UMPLSBHv3_DC1-OUT
+  bandwidth remaining percent 25 
+  queue-limit 1600000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 1 800000 bytes 1600000 bytes
+  set cos 1
+  set mpls experimental topmost 1
+ class class-default
+  bandwidth remaining percent 10 
+  queue-limit 400000 bytes
+  random-detect discard-class-based
+  random-detect discard-class 0 200000 bytes 400000 bytes
+  set cos 0
+  set mpls experimental topmost 0
+policy-map STATSv3_ABR_IN-10G
+ class STATSv3_PREC_EXP_7-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 7
+   exceed-action set-discard-class-transmit 7
+ class STATSv3_PREC_EXP_6-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 6
+   exceed-action set-discard-class-transmit 6
+ class STATSv3_PREC_EXP_5-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 5
+   exceed-action set-discard-class-transmit 5
+ class STATSv3_PREC_EXP_4-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 4
+   exceed-action set-discard-class-transmit 4
+ class STATSv3_PREC_EXP_3-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 3
+   exceed-action set-discard-class-transmit 3
+ class STATSv3_PREC_EXP_2-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 2
+   exceed-action set-discard-class-transmit 2
+ class STATSv3_PREC_EXP_1-IN
+  police cir 10000000000
+   conform-action set-discard-class-transmit 1
+   exceed-action set-discard-class-transmit 1
+ class class-default
+  police cir 10000000000
+   conform-action set-discard-class-transmit 0
+   exceed-action set-discard-class-transmit 0
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.1.1.111 255.255.255.255
+ ip ospf 4000 area 127
+ ip ospf cost 1
+!
+interface GigabitEthernet0/0/0
+ description to TP5K
+ no ip address
+ negotiation auto
+ cdp enable
+ synchronous mode
+!
+interface GigabitEthernet0/0/1
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/2
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/3
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/4
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/5
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/6
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet0/0/7
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface TenGigabitEthernet0/0/8
+ description to Spirent
+ no ip address
+ cdp enable
+!
+interface TenGigabitEthernet0/1/0
+ description to Te0/0/0/18.soda14.black.ring
+ mtu 9216
+ no ip address
+ load-interval 30
+ carrier-delay up 2
+ carrier-delay down msec 0
+ cdp enable
+ synchronous mode
+ service-policy output UMPLSBHv3_ABR_OUT-10G
+ service instance 10 ethernet
+  encapsulation untagged
+  service-policy input STATSv3_ABR_IN-10G
+  bridge-domain 10
+ !
+!
+interface TenGigabitEthernet0/1/1
+ description to Te0/0/0/0.lexus.black.ring
+ mtu 9216
+ no ip address
+ load-interval 30
+ carrier-delay up 2
+ carrier-delay down msec 0
+ cdp enable
+ synchronous mode
+ service-policy output UMPLSBHv3_ABR_OUT-10G
+ service instance 11 ethernet
+  encapsulation untagged
+  service-policy input STATSv3_ABR_IN-10G
+  bridge-domain 11
+ !
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ ip address 198.18.188.6 255.255.192.0
+ negotiation auto
+!
+interface BDI10
+ dampening
+ ip address 10.103.1.2 255.255.255.252
+ ip mtu 9216
+ ip ospf network point-to-point
+ ip ospf mtu-ignore
+ ip ospf 4000 area 127
+ load-interval 30
+ carrier-delay msec 0
+ mpls ip
+ mpls mtu 9216
+!
+interface BDI11
+ dampening
+ ip address 10.103.1.5 255.255.255.252
+ ip mtu 9216
+ ip ospf network point-to-point
+ ip ospf mtu-ignore
+ ip ospf 4000 area 127
+ load-interval 30
+ carrier-delay msec 0
+ mpls ip
+ mpls mtu 9216
+!
+router ospf 4000
+ router-id 10.1.1.111
+ max-metric router-lsa external-lsa on-startup 300
+ prefix-suppression
+ timers throttle spf 50 200 5000
+ timers throttle lsa 50 200 5000
+ timers lsa arrival 100
+ timers pacing flood 5
+ passive-interface Loopback0
+ bfd all-interfaces
+ mpls ldp sync
+!
+ip forward-protocol nd
+!
+ip ftp source-interface GigabitEthernet0
+no ip http server
+no ip http secure-server
+ip tftp source-interface GigabitEthernet0
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 198.18.128.1
+!
+logging alarm informational
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ stopbits 1
+line vty 0 5
+ exec-timeout 0 0
+ login local
+ transport input all
+!
+network-clock revertive 
+network-clock synchronization automatic
+network-clock synchronization mode QL-enabled
+network-clock input-source 10 interface GigabitEthernet0/0/0
+network-clock input-source 20 interface TenGigabitEthernet0/1/0
+network-clock wait-to-restore 10 global
+network-clock log ql-changes
+esmc process
+ntp server vrf Mgmt-intf 198.18.128.1
+!
+ptp clock boundary domain 24 hybrid  
+ clock-port Slave-TP5K profile g8275.1 local-priority 10
+  transport ethernet multicast interface Gi0/0/0 
+ clock-port Master-1 profile g8275.1
+  transport ethernet multicast interface Te0/1/0 
+ clock-port Master-2 profile g8275.1
+  transport ethernet multicast interface Te0/1/1 
+!
+
+!
+end
